@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifica Recensione - FestivalProf</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="form-container">
+        <h2 style="text-align: center; margin-bottom: 1.5rem; color: #111827; font-weight: 800;">✏️ Modifica la tua Recensione</h2>
+
+        <form th:action="@{/recensioni/{id}/edit(id=${recensione.id})}" method="POST">
+            <div class="form-group">
+                <label for="voto">Valutazione (1 - 5 Stelle)</label>
+                <select id="voto" name="voto" class="form-control" required>
+                    <option value="5" th:selected="${recensione.voto == 5}">⭐⭐⭐⭐⭐ (5 - Eccellente)</option>
+                    <option value="4" th:selected="${recensione.voto == 4}">⭐⭐⭐⭐ (4 - Molto Buono)</option>
+                    <option value="3" th:selected="${recensione.voto == 3}">⭐⭐⭐ (3 - Discreto)</option>
+                    <option value="2" th:selected="${recensione.voto == 2}">⭐⭐ (2 - Sufficiente)</option>
+                    <option value="1" th:selected="${recensione.voto == 1}">⭐ (1 - Scarso)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="titolo">Titolo Recensione</label>
+                <input type="text" id="titolo" name="titolo" th:value="${recensione.titolo}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="testo">Testo Recensione</label>
+                <textarea id="testo" name="testo" class="form-control" rows="5" required th:text="${recensione.testo}"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-size: 1rem; margin-top: 1rem;">Salva Modifiche</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

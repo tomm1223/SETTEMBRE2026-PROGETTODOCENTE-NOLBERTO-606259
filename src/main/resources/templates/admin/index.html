@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pannello Amministratore - FestivalProf</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">⚡ Pannello di Amministrazione</h1>
+            <p style="color: #6b7280; margin-top: 4px;">Gestione completa del sistema informativo per i festival cinematografici</p>
+        </div>
+        <span class="nav-admin-badge" style="font-size: 1rem; padding: 6px 16px;">Ruolo: ADMIN</span>
+    </div>
+
+    <!-- Statistiche del Sistema -->
+    <div class="grid" style="margin-bottom: 2.5rem;">
+        <div class="card" style="border-left: 4px solid #f59e0b;">
+            <h3 style="margin:0; font-size: 1rem; color: #6b7280;">🏆 Festival Gestiti</h3>
+            <div style="font-size: 2.2rem; font-weight: 900; color: #111827; margin-top: 5px;" th:text="${festivalsCount}">0</div>
+            <a th:href="@{/admin/festivals/new}" class="btn btn-outline" style="margin-top: 10px; font-size: 0.85rem;">+ Nuovo Festival</a>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #3b82f6;">
+            <h3 style="margin:0; font-size: 1rem; color: #6b7280;">🎬 Film in Catalogo</h3>
+            <div style="font-size: 2.2rem; font-weight: 900; color: #111827; margin-top: 5px;" th:text="${filmsCount}">0</div>
+            <a th:href="@{/admin/movies/new}" class="btn btn-outline" style="margin-top: 10px; font-size: 0.85rem;">+ Nuovo Film</a>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #10b981;">
+            <h3 style="margin:0; font-size: 1rem; color: #6b7280;">🎥 Registi Registrati</h3>
+            <div style="font-size: 2.2rem; font-weight: 900; color: #111827; margin-top: 5px;" th:text="${registiCount}">0</div>
+            <a th:href="@{/admin/directors/new}" class="btn btn-outline" style="margin-top: 10px; font-size: 0.85rem;">+ Nuovo Regista</a>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #8b5cf6;">
+            <h3 style="margin:0; font-size: 1rem; color: #6b7280;">🏛️ Sale Cinematografiche</h3>
+            <div style="font-size: 2.2rem; font-weight: 900; color: #111827; margin-top: 5px;" th:text="${saleCount}">0</div>
+            <a th:href="@{/admin/halls/new}" class="btn btn-outline" style="margin-top: 10px; font-size: 0.85rem;">+ Nuova Sala</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

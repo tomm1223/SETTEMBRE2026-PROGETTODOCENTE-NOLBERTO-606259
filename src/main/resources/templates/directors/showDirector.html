@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${regista.nomeCompleto + ' - FestivalProf'}">Dettaglio Regista</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <span class="badge badge-gold" th:text="${regista.nazionalita}">Nazionalità</span>
+                <h1 class="page-title" style="margin-top: 8px;" th:text="${regista.nomeCompleto}">Nome Regista</h1>
+                <p style="color: #6b7280; font-size: 1.1rem; margin-top: 4px;">
+                    🎂 Data di nascita: <strong th:text="${#temporals.format(regista.dataNascita, 'dd MMMM yyyy')}">01 Gennaio 1970</strong>
+                </p>
+            </div>
+
+            <div th:if="${isAdmin}" style="display: flex; gap: 10px;">
+                <a th:href="@{/admin/directors/{id}/edit(id=${regista.id})}" class="btn btn-outline">✏️ Modifica</a>
+                <form th:action="@{/admin/directors/{id}/delete(id=${regista.id})}" method="POST" style="margin:0;" onsubmit="return confirm('Eliminare questo regista?');">
+                    <button type="submit" class="btn btn-danger">🗑️ Elimina</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filmografia -->
+    <div class="page-header">
+        <h2 class="page-title">🎬 Filmografia (<span th:text="${films.size()}">0</span>)</h2>
+    </div>
+
+    <div th:if="${films.isEmpty()}" style="padding: 2rem; background: white; border-radius: 8px; text-align: center; color: #6b7280;">
+        Nessun film attualmente a sistema per questo regista.
+    </div>
+
+    <div th:unless="${films.isEmpty()}" class="grid">
+        <div th:each="film : ${films}" class="card">
+            <div>
+                <span class="badge badge-blue" th:text="${film.genere}">Genere</span>
+                <h3 class="card-title" style="margin-top: 8px;" th:text="${film.titolo}">Titolo Film</h3>
+                <p class="card-subtitle">Anno: <span th:text="${film.anno}">2023</span> | Durata: <span th:text="${film.durata}">120</span> min</p>
+            </div>
+            <div style="margin-top: 1.5rem;">
+                <a th:href="@{/movies/{id}(id=${film.id})}" class="btn btn-primary" style="width: 100%; text-align: center;">Scheda Film</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

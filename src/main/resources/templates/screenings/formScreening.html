@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Programmazione Proiezione - FestivalProf</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="form-container">
+        <h2 style="text-align: center; margin-bottom: 1.5rem; color: #111827; font-weight: 800;"
+            th:text="${proiezione != null} ? '✏️ Modifica Proiezione' : '🎞️ Programma Nuova Proiezione'">
+            Programma Proiezione
+        </h2>
+
+        <!-- Messaggio di Errore Sovrapposizione od Op. Transazionale -->
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            ⚠️ <span th:text="${errorMessage}">Errore durante la programmazione</span>
+        </div>
+
+        <form th:action="${proiezione != null} ? @{/admin/screenings/{id}/edit(id=${proiezione.id})} : @{/admin/screenings/new}" method="POST">
+            
+            <!-- Modalità Creazione -->
+            <div th:if="${proiezione == null}">
+                <div class="form-group">
+                    <label for="festivalId">Festival</label>
+                    <select id="festivalId" name="festivalId" class="form-control" required>
+                        <option value="">-- Seleziona Festival --</option>
+                        <option th:each="f : ${festivals}" 
+                                th:value="${f.id}" 
+                                th:selected="${selectedFestivalId != null and selectedFestivalId == f.id}"
+                                th:text="${f.nome + ' (' + f.anno + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="filmId">Film da Proiettare</label>
+                    <select id="filmId" name="filmId" class="form-control" required>
+                        <option value="">-- Seleziona Film --</option>
+                        <option th:each="m : ${films}" th:value="${m.id}" th:text="${m.titolo + ' (' + m.durata + ' min)'}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Selezione Sala, Data e Ora -->
+            <div class="form-group">
+                <label for="salaId">Sala Cinematografica</label>
+                <select id="salaId" name="salaId" class="form-control" required>
+                    <option value="">-- Seleziona Sala --</option>
+                    <option th:each="s : ${sale}" 
+                            th:value="${s.id}" 
+                            th:selected="${proiezione != null and proiezione.sala != null and proiezione.sala.id == s.id}"
+                            th:text="${s.nome + ' - Capienza: ' + s.capienza + ' posti'}">
+                    </option>
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label for="data">Data Proiezione</label>
+                    <input type="date" id="data" name="data" th:value="${proiezione != null ? proiezione.data : ''}" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="ora">Ora Inizio</label>
+                    <input type="time" id="ora" name="ora" th:value="${proiezione != null ? proiezione.ora : ''}" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- Modalità Modifica Stato -->
+            <div th:if="${proiezione != null}" class="form-group">
+                <label for="stato">Stato Proiezione</label>
+                <select id="stato" name="stato" class="form-control" required>
+                    <option th:each="st : ${stati}" 
+                            th:value="${st.name()}" 
+                            th:selected="${proiezione.stato == st}"
+                            th:text="${st.label}">
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-size: 1rem; margin-top: 1rem;">Conferma Programmazione</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

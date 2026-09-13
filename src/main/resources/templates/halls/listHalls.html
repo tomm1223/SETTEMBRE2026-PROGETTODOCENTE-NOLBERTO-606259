@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sale Cinematografiche - FestivalProf</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">🏛️ Sale Cinematografiche</h1>
+            <p style="color: #6b7280; margin-top: 4px;">Gestione delle sale ospitanti le proiezioni dei festival</p>
+        </div>
+        <a th:if="${isAdmin}" th:href="@{/admin/halls/new}" class="btn btn-primary">➕ Nuova Sala</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome Sala</th>
+                <th>Indirizzo</th>
+                <th>Capienza Spettatori</th>
+                <th th:if="${isAdmin}">Azioni Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="sala : ${sale}">
+                <td><strong th:text="${sala.nome}">Sala Grande</strong></td>
+                <td th:text="${sala.indirizzo}">Lungomare Marconi 30, Venezia</td>
+                <td><span class="badge badge-gold">🪑 <span th:text="${sala.capienza}">1000</span> posti</span></td>
+                <td th:if="${isAdmin}">
+                    <div style="display: flex; gap: 8px;">
+                        <a th:href="@{/admin/halls/{id}/edit(id=${sala.id})}" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.85rem;">Modifica</a>
+                        <form th:action="@{/admin/halls/{id}/delete(id=${sala.id})}" method="POST" style="margin: 0;" onsubmit="return confirm('Eliminare questa sala?');">
+                            <button type="submit" class="btn btn-danger" style="padding: 4px 10px; font-size: 0.85rem;">Elimina</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

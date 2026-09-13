@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Festival - FestivalProf</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="form-container">
+        <h2 style="text-align: center; margin-bottom: 1.5rem; color: #111827; font-weight: 800;"
+            th:text="${festival.id != null ? '✏️ Modifica Festival' : '➕ Crea Nuovo Festival'}">
+            Nuovo Festival
+        </h2>
+
+        <form th:action="${festival.id != null} ? @{/admin/festivals/{id}/edit(id=${festival.id})} : @{/admin/festivals/new}" method="POST">
+            <div class="form-group">
+                <label for="nome">Nome Festival</label>
+                <input type="text" id="nome" th:field="${festival.nome}" class="form-control" placeholder="Es. Mostra del Cinema di Venezia">
+                <div class="error-msg" th:if="${#fields.hasErrors('festival.nome')}" th:errors="${festival.nome}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="anno">Anno Edizione</label>
+                <input type="number" id="anno" th:field="${festival.anno}" class="form-control" placeholder="2026">
+                <div class="error-msg" th:if="${#fields.hasErrors('festival.anno')}" th:errors="${festival.anno}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="citta">Città</label>
+                <input type="text" id="citta" th:field="${festival.citta}" class="form-control" placeholder="Venezia">
+                <div class="error-msg" th:if="${#fields.hasErrors('festival.citta')}" th:errors="${festival.citta}"></div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label for="dataInizio">Data Inizio</label>
+                    <input type="date" id="dataInizio" th:field="${festival.dataInizio}" class="form-control">
+                    <div class="error-msg" th:if="${#fields.hasErrors('festival.dataInizio')}" th:errors="${festival.dataInizio}"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dataFine">Data Fine</label>
+                    <input type="date" id="dataFine" th:field="${festival.dataFine}" class="form-control">
+                    <div class="error-msg" th:if="${#fields.hasErrors('festival.dataFine')}" th:errors="${festival.dataFine}"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descrizione">Descrizione</label>
+                <textarea id="descrizione" th:field="${festival.descrizione}" class="form-control" rows="4" placeholder="Descrizione del festival..."></textarea>
+                <div class="error-msg" th:if="${#fields.hasErrors('festival.descrizione')}" th:errors="${festival.descrizione}"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-size: 1rem; margin-top: 1rem;">Salva Festival</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

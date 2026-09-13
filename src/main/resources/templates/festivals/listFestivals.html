@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Festival Cinematografici - FestivalProf</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">🏆 Festival Cinematografici</h1>
+            <p style="color: #6b7280; margin-top: 4px;">Elenco completo dei festival del cinema registrati nel sistema</p>
+        </div>
+        <a th:if="${isAdmin}" th:href="@{/admin/festivals/new}" class="btn btn-primary">➕ Nuovo Festival</a>
+    </div>
+
+    <div class="grid">
+        <div th:each="festival : ${festivals}" class="card">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="badge badge-gold" th:text="${festival.anno}">2026</span>
+                    <span style="font-size: 0.85rem; color: #6b7280; font-weight: 600;">📍 <span th:text="${festival.citta}">Città</span></span>
+                </div>
+                <h2 class="card-title" style="margin-top: 10px;" th:text="${festival.nome}">Nome Festival</h2>
+                <p class="card-subtitle">
+                    📅 <span th:text="${#temporals.format(festival.dataInizio, 'dd/MM/yyyy')}">01/01/2026</span> - 
+                    <span th:text="${#temporals.format(festival.dataFine, 'dd/MM/yyyy')}">10/01/2026</span>
+                </p>
+                <p style="color: #4b5563; font-size: 0.95rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;" th:text="${festival.descrizione}">
+                    Descrizione breve...
+                </p>
+            </div>
+            <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f3f4f6; padding-top: 1rem;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #4b5563;">
+                    🎬 <span th:text="${festival.films.size()}">0</span> film in programma
+                </span>
+                <a th:href="@{/festivals/{id}(id=${festival.id})}" class="btn btn-outline" style="font-size: 0.85rem;">Dettagli &rarr;</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

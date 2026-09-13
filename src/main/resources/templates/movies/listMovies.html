@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalogo Film - FestivalProf</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">🎬 Catalogo Film</h1>
+            <p style="color: #6b7280; margin-top: 4px;">Tutti i film inseriti a sistema con registi e valutazioni</p>
+        </div>
+        <a th:if="${isAdmin}" th:href="@{/admin/movies/new}" class="btn btn-primary">➕ Nuovo Film</a>
+    </div>
+
+    <div class="grid">
+        <div th:each="film : ${films}" class="card">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <span class="badge badge-blue" th:text="${film.genere}">Genere</span>
+                    <span style="font-weight: 800; color: #e77600; font-size: 1.1rem;">★ <span th:text="${film.mediaVoti}">0.0</span></span>
+                </div>
+                <h2 class="card-title" style="margin-top: 8px;" th:text="${film.titolo}">Titolo Film</h2>
+                <p class="card-subtitle">
+                    Anno: <span th:text="${film.anno}">2023</span> | 
+                    Durata: <span th:text="${film.durata}">120</span> min | 
+                    Paese: <span th:text="${film.paeseProduzione}">IT</span>
+                </p>
+                <p style="color: #4b5563; font-size: 0.95rem;">
+                    Regia: <strong th:text="${film.regista != null ? film.regista.nomeCompleto : 'N/D'}">Nome Regista</strong>
+                </p>
+            </div>
+            <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f3f4f6; padding-top: 0.8rem;">
+                <span style="font-size: 0.85rem; color: #6b7280; font-weight: 600;">💬 <span th:text="${film.recensioni.size()}">0</span> recensioni</span>
+                <a th:href="@{/movies/{id}(id=${film.id})}" class="btn btn-primary" style="font-size: 0.85rem;">Scheda Film</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

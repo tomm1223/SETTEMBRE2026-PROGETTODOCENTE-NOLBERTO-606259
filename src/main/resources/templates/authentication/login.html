@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Accedi - FestivalProf</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="form-container">
+        <h2 style="text-align: center; margin-bottom: 1.5rem; color: #111827; font-weight: 800;">🔐 Accedi al Sistema</h2>
+
+        <div th:if="${param.error}" class="alert alert-danger">
+            ⚠️ Username o Password errati. Riprova.
+        </div>
+
+        <div th:if="${param.registered}" class="alert alert-success">
+            ✅ Registrazione completata! Ora puoi effettuare il login con le tue credenziali.
+        </div>
+
+        <form th:action="@{/login}" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" required placeholder="Inserisci lo username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required placeholder="Inserisci la password">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-size: 1rem; margin-top: 1rem;">Login</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 1.5rem; color: #6b7280; font-size: 0.95rem;">
+            Non hai ancora un account? <a th:href="@{/register}" style="color: #d97706; font-weight: 700;">Registrati qui</a>
+        </p>
+
+        <div style="margin-top: 2rem; padding: 1rem; background: #f9fafb; border-radius: 8px; border: 1px dashed #d1d5db; font-size: 0.85rem; color: #4b5563;">
+            <p style="margin: 0 0 5px 0;"><strong>Account Demo predefiniti:</strong></p>
+            <p style="margin: 2px 0;">• <strong>Amministratore:</strong> Username: <code>admin</code> | Password: <code>admin</code></p>
+            <p style="margin: 2px 0;">• <strong>Utente Registrato:</strong> Username: <code>user</code> | Password: <code>user</code></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
