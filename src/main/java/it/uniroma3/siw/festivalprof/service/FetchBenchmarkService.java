@@ -39,30 +39,49 @@ public class FetchBenchmarkService {
         private int count;
         private double lazyTimeMs;
         private int lazyQueries;
+        private double lazyMemoryMb;
         private double joinFetchTimeMs;
         private int joinFetchQueries;
+        private double joinFetchMemoryMb;
         private double entityGraphTimeMs;
         private int entityGraphQueries;
+        private double entityGraphMemoryMb;
 
-        public BenchmarkResult(int count, double lazyTimeMs, int lazyQueries,
-                               double joinFetchTimeMs, int joinFetchQueries,
-                               double entityGraphTimeMs, int entityGraphQueries) {
+        public BenchmarkResult(int count, double lazyTimeMs, int lazyQueries, double lazyMemoryMb,
+                               double joinFetchTimeMs, int joinFetchQueries, double joinFetchMemoryMb,
+                               double entityGraphTimeMs, int entityGraphQueries, double entityGraphMemoryMb) {
             this.count = count;
             this.lazyTimeMs = lazyTimeMs;
             this.lazyQueries = lazyQueries;
+            this.lazyMemoryMb = lazyMemoryMb;
             this.joinFetchTimeMs = joinFetchTimeMs;
             this.joinFetchQueries = joinFetchQueries;
+            this.joinFetchMemoryMb = joinFetchMemoryMb;
             this.entityGraphTimeMs = entityGraphTimeMs;
             this.entityGraphQueries = entityGraphQueries;
+            this.entityGraphMemoryMb = entityGraphMemoryMb;
         }
 
         public int getCount() { return count; }
         public double getLazyTimeMs() { return lazyTimeMs; }
         public int getLazyQueries() { return lazyQueries; }
+        public double getLazyMemoryMb() { return lazyMemoryMb; }
         public double getJoinFetchTimeMs() { return joinFetchTimeMs; }
         public int getJoinFetchQueries() { return joinFetchQueries; }
+        public double getJoinFetchMemoryMb() { return joinFetchMemoryMb; }
         public double getEntityGraphTimeMs() { return entityGraphTimeMs; }
         public int getEntityGraphQueries() { return entityGraphQueries; }
+        public double getEntityGraphMemoryMb() { return entityGraphMemoryMb; }
+    }
+
+    private void prepareCleanMemoryState() {
+        entityManager.flush();
+        entityManager.clear();
+        System.gc();
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException ignored) {
+        }
     }
 
     @Transactional
@@ -110,15 +129,13 @@ public class FetchBenchmarkService {
             }
 
             festivalRepository.save(testFestival);
-
-            entityManager.flush();
-            entityManager.clear();
-
             Long festivalId = testFestival.getId();
 
             // =========================================================================
             // MISURAZIONE 1: Accesso LAZY Standard (1 query lista film + N query registi = N+1)
             // =========================================================================
+            prepareCleanMemoryState();
+            long beforeMemLazy = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
             long startLazy = System.nanoTime();
             int lazyQueryCounter = 0;
 
@@ -132,14 +149,15 @@ public class FetchBenchmarkService {
                 }
             }
             long endLazy = System.nanoTime();
+            long afterMemLazy = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
             double lazyTimeMs = (endLazy - startLazy) / 1_000_000.0;
-
-            entityManager.flush();
-            entityManager.clear();
+            double lazyMemoryMb = Math.max(0.01, (afterMemLazy - beforeMemLazy) / (1024.0 * 1024.0));
 
             // =========================================================================
             // MISURAZIONE 2: JPQL JOIN FETCH (1 SOLA Query SQL per l'intera lista)
             // =========================================================================
+            prepareCleanMemoryState();
+            long beforeMemJoin = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
             long startJoin = System.nanoTime();
             int joinQueryCounter = 0;
 
@@ -152,14 +170,15 @@ public class FetchBenchmarkService {
                 }
             }
             long endJoin = System.nanoTime();
+            long afterMemJoin = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
             double joinFetchTimeMs = (endJoin - startJoin) / 1_000_000.0;
-
-            entityManager.flush();
-            entityManager.clear();
+            double joinFetchMemoryMb = Math.max(0.01, (afterMemJoin - beforeMemJoin) / (1024.0 * 1024.0));
 
             // =========================================================================
             // MISURAZIONE 3: @EntityGraph (1 SOLA Query SQL per l'intera lista)
             // =========================================================================
+            prepareCleanMemoryState();
+            long beforeMemGraph = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
             long startGraph = System.nanoTime();
             int graphQueryCounter = 0;
 
@@ -172,11 +191,13 @@ public class FetchBenchmarkService {
                 }
             }
             long endGraph = System.nanoTime();
+            long afterMemGraph = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
             double entityGraphTimeMs = (endGraph - startGraph) / 1_000_000.0;
+            double entityGraphMemoryMb = Math.max(0.01, (afterMemGraph - beforeMemGraph) / (1024.0 * 1024.0));
 
-            return new BenchmarkResult(count, lazyTimeMs, lazyQueryCounter,
-                                       joinFetchTimeMs, joinQueryCounter,
-                                       entityGraphTimeMs, graphQueryCounter);
+            return new BenchmarkResult(count, lazyTimeMs, lazyQueryCounter, lazyMemoryMb,
+                                       joinFetchTimeMs, joinQueryCounter, joinFetchMemoryMb,
+                                       entityGraphTimeMs, graphQueryCounter, entityGraphMemoryMb);
 
         } finally {
             // Ripulitura automatica dei dati Dummy per mantenere pulito il DB

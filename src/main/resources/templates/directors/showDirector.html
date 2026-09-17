@@ -16,14 +16,14 @@
                 <span class="badge badge-gold" th:text="${regista.nazionalita}">Nazionalità</span>
                 <h1 class="page-title" style="margin-top: 8px;" th:text="${regista.nomeCompleto}">Nome Regista</h1>
                 <p style="color: #6b7280; font-size: 1.1rem; margin-top: 4px;">
-                    🎂 Data di nascita: <strong th:text="${#temporals.format(regista.dataNascita, 'dd MMMM yyyy')}">01 Gennaio 1970</strong>
+                    Data di nascita: <strong th:text="${#temporals.format(regista.dataNascita, 'dd MMMM yyyy')}">01 Gennaio 1970</strong>
                 </p>
             </div>
 
             <div th:if="${isAdmin}" style="display: flex; gap: 10px;">
-                <a th:href="@{/admin/directors/{id}/edit(id=${regista.id})}" class="btn btn-outline">✏️ Modifica</a>
+                <a th:href="@{/admin/directors/{id}/edit(id=${regista.id})}" class="btn btn-outline">Modifica</a>
                 <form th:action="@{/admin/directors/{id}/delete(id=${regista.id})}" method="POST" style="margin:0;" onsubmit="return confirm('Eliminare questo regista?');">
-                    <button type="submit" class="btn btn-danger">🗑️ Elimina</button>
+                    <button type="submit" class="btn btn-danger">Elimina</button>
                 </form>
             </div>
         </div>
@@ -31,7 +31,7 @@
 
     <!-- Filmografia -->
     <div class="page-header">
-        <h2 class="page-title">🎬 Filmografia (<span th:text="${films.size()}">0</span>)</h2>
+        <h2 class="page-title">Filmografia (<span th:text="${films.size()}">0</span>)</h2>
     </div>
 
     <div th:if="${films.isEmpty()}" style="padding: 2rem; background: white; border-radius: 8px; text-align: center; color: #6b7280;">

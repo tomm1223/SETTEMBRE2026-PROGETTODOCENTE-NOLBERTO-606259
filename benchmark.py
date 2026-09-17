@@ -38,30 +38,36 @@ def run_single_benchmark():
 
     lazy_time = data.get("lazyTimeMs", 0)
     lazy_queries = data.get("lazyQueries", 0)
+    lazy_mem = data.get("lazyMemoryMb", 0)
+
     join_time = data.get("joinFetchTimeMs", 0)
     join_queries = data.get("joinFetchQueries", 0)
+    join_mem = data.get("joinFetchMemoryMb", 0)
+
     graph_time = data.get("entityGraphTimeMs", 0)
     graph_queries = data.get("entityGraphQueries", 0)
+    graph_mem = data.get("entityGraphMemoryMb", 0)
 
     print("\n[2/3] RISULTATI DEL BENCHMARK:")
-    print("+------------------------------------+----------------+----------------+")
-    print("| STRATEGIA DI FETCHING              | TEMPO (ms)     | QUERY SQL      |")
-    print("+------------------------------------+----------------+----------------+")
-    print(f"| 1. LAZY Standard (N+1 Query)       | {lazy_time:14.2f} | {lazy_queries:14d} |")
-    print(f"| 2. JPQL JOIN FETCH                 | {join_time:14.2f} | {join_queries:14d} |")
-    print(f"| 3. @EntityGraph (Spring Data JPA)  | {graph_time:14.2f} | {graph_queries:14d} |")
-    print("+------------------------------------+----------------+----------------+")
+    print("+------------------------------------+----------------+----------------+----------------+")
+    print("| STRATEGIA DI FETCHING              | TEMPO (ms)     | QUERY SQL      | RAM HEAP (MB)  |")
+    print("+------------------------------------+----------------+----------------+----------------+")
+    print(f"| 1. LAZY Standard (N+1 Query)       | {lazy_time:14.2f} | {lazy_queries:14d} | {lazy_mem:14.2f} |")
+    print(f"| 2. JPQL JOIN FETCH                 | {join_time:14.2f} | {join_queries:14d} | {join_mem:14.2f} |")
+    print(f"| 3. @EntityGraph (Spring Data JPA)  | {graph_time:14.2f} | {graph_queries:14d} | {graph_mem:14.2f} |")
+    print("+------------------------------------+----------------+----------------+----------------+")
 
     print("\n[3/3] Apertura della finestra grafica con Matplotlib...")
 
     strategies = ['LAZY Standard', 'JPQL JOIN FETCH', '@EntityGraph']
     times = [lazy_time, join_time, graph_time]
-    queries = [lazy_queries, join_queries, graph_queries]
+    mems = [lazy_mem, join_mem, graph_mem]
     colors = ['#dc3545', '#0d6efd', '#198754']
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
     fig.suptitle(f'FestivalProf - JPA Fetching Strategies Benchmark (Film Simulati: {count})', fontsize=16, fontweight='bold')
 
+    # Grafico 1: Tempi di esecuzione (ms)
     bars1 = ax1.bar(strategies, times, color=colors, width=0.5)
     ax1.set_title('Tempo di Esecuzione (Millisecondi)', fontsize=12, fontweight='bold')
     ax1.set_ylabel('Tempo (ms)', fontsize=11)
@@ -71,14 +77,15 @@ def run_single_benchmark():
         yval = bar.get_height()
         ax1.text(bar.get_x() + bar.get_width()/2.0, yval + (yval * 0.02), f'{yval:.2f} ms', ha='center', va='bottom', fontweight='bold')
 
-    bars2 = ax2.bar(strategies, queries, color=colors, width=0.5)
-    ax2.set_title('Numero di Query SQL Eseguite', fontsize=12, fontweight='bold')
-    ax2.set_ylabel('N° Query SQL', fontsize=11)
+    # Grafico 2: Memoria RAM JVM Allocata (MB)
+    bars2 = ax2.bar(strategies, mems, color=colors, width=0.5)
+    ax2.set_title('Memoria RAM JVM Allocata (MB)', fontsize=12, fontweight='bold')
+    ax2.set_ylabel('Memoria Heap (MB)', fontsize=11)
     ax2.grid(axis='y', linestyle='--', alpha=0.7)
 
     for bar in bars2:
         yval = bar.get_height()
-        ax2.text(bar.get_x() + bar.get_width()/2.0, yval + 0.1, f'{int(yval)} SQL', ha='center', va='bottom', fontweight='bold')
+        ax2.text(bar.get_x() + bar.get_width()/2.0, yval + 0.005, f'{yval:.2f} MB', ha='center', va='bottom', fontweight='bold')
 
     plt.tight_layout()
     plt.show()
@@ -105,13 +112,13 @@ def run_curve_benchmark():
 
     n_values = [item.get("count") for item in data_list]
     lazy_times = [item.get("lazyTimeMs") for item in data_list]
-    lazy_queries = [item.get("lazyQueries") for item in data_list]
+    lazy_mems = [item.get("lazyMemoryMb") for item in data_list]
 
     join_times = [item.get("joinFetchTimeMs") for item in data_list]
-    join_queries = [item.get("joinFetchQueries") for item in data_list]
+    join_mems = [item.get("joinFetchMemoryMb") for item in data_list]
 
     graph_times = [item.get("entityGraphTimeMs") for item in data_list]
-    graph_queries = [item.get("entityGraphQueries") for item in data_list]
+    graph_mems = [item.get("entityGraphMemoryMb") for item in data_list]
 
     print("\n[2/3] RISULTATI DELLA CURVA D'ANDAMENTO:")
     print("+--------+-------------------+--------------------+--------------------+")
@@ -124,7 +131,7 @@ def run_curve_benchmark():
     print("\n[3/3] Generazione delle curve d'andamento con Matplotlib...")
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
-    fig.suptitle('FestivalProf - Curva di Scalabilità JPA: Tempo di Esecuzione e Query SQL in funzione di N', fontsize=15, fontweight='bold')
+    fig.suptitle('FestivalProf - Curva di Scalabilità JPA: Tempo di Esecuzione e Memoria RAM JVM (MB) in funzione di N', fontsize=15, fontweight='bold')
 
     # Curva 1: Tempi di esecuzione (ms)
     ax1.plot(n_values, lazy_times, marker='o', linewidth=2.5, color='#dc3545', label='1. LAZY Standard (N+1)')
@@ -137,14 +144,14 @@ def run_curve_benchmark():
     ax1.grid(True, linestyle='--', alpha=0.7)
     ax1.legend(loc='upper left')
 
-    # Curva 2: Numero di Query SQL
-    ax2.plot(n_values, lazy_queries, marker='o', linewidth=2.5, color='#dc3545', label='1. LAZY Standard (N+1 Query)')
-    ax2.plot(n_values, join_queries, marker='s', linewidth=2.5, color='#0d6efd', label='2. JPQL JOIN FETCH (1 Query)')
-    ax2.plot(n_values, graph_queries, marker='^', linewidth=2.5, color='#198754', label='3. @EntityGraph (1 Query)')
+    # Curva 2: Memoria RAM JVM Allocata (MB)
+    ax2.plot(n_values, lazy_mems, marker='o', linewidth=2.5, color='#dc3545', label='1. LAZY Standard (Consumo RAM Heap)')
+    ax2.plot(n_values, join_mems, marker='s', linewidth=2.5, color='#0d6efd', label='2. JPQL JOIN FETCH (Consumo RAM Heap)')
+    ax2.plot(n_values, graph_mems, marker='^', linewidth=2.5, color='#198754', label='3. @EntityGraph (Consumo RAM Heap)')
 
-    ax2.set_title('Numero di Query SQL vs N Film', fontsize=12, fontweight='bold')
+    ax2.set_title('Memoria RAM JVM Allocata (MB) vs N Film', fontsize=12, fontweight='bold')
     ax2.set_xlabel('Numero di Film Simulati (N)', fontsize=11)
-    ax2.set_ylabel('N° Query SQL', fontsize=11)
+    ax2.set_ylabel('Memoria RAM Heap (MB)', fontsize=11)
     ax2.grid(True, linestyle='--', alpha=0.7)
     ax2.legend(loc='upper left')
 
@@ -157,7 +164,7 @@ def main():
     print("=================================================================")
     print("Seleziona la modalità di visualizzazione:")
     print("  [1] Benchmark Puntuale (Istogramma a barre per un singolo N)")
-    print("  [2] Curva d'Andamento (Line Plot: Scalabilita' del tempo e delle query in funzione di N)")
+    print("  [2] Curva d'Andamento (Line Plot: Scalabilita' del tempo e della memoria RAM in funzione di N)")
     print("-----------------------------------------------------------------")
     
     choice = input("Scegli un'opzione [1/2, Default 2]: ").strip()

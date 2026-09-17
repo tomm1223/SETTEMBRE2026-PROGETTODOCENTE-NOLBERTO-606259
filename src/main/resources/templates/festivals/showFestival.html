@@ -16,16 +16,16 @@
                 <span class="badge badge-gold" th:text="${festival.anno}">2026</span>
                 <h1 class="page-title" style="margin-top: 8px;" th:text="${festival.nome}">Nome Festival</h1>
                 <p style="color: #6b7280; font-size: 1.1rem; margin-top: 4px;">
-                    📍 <span th:text="${festival.citta}">Città</span> | 
-                    📅 <span th:text="${#temporals.format(festival.dataInizio, 'dd/MM/yyyy')}">01/01</span> - 
+                    <span th:text="${festival.citta}">Città</span> | 
+                    <span th:text="${#temporals.format(festival.dataInizio, 'dd/MM/yyyy')}">01/01</span> - 
                     <span th:text="${#temporals.format(festival.dataFine, 'dd/MM/yyyy')}">10/01</span>
                 </p>
             </div>
             <!-- Admin Buttons -->
             <div th:if="${isAdmin}" style="display: flex; gap: 10px;">
-                <a th:href="@{/admin/festivals/{id}/edit(id=${festival.id})}" class="btn btn-outline">✏️ Modifica</a>
+                <a th:href="@{/admin/festivals/{id}/edit(id=${festival.id})}" class="btn btn-outline">Modifica</a>
                 <form th:action="@{/admin/festivals/{id}/delete(id=${festival.id})}" method="POST" style="margin:0;" onsubmit="return confirm('Eliminare definitivamente questo festival?');">
-                    <button type="submit" class="btn btn-danger">🗑️ Elimina</button>
+                    <button type="submit" class="btn btn-danger">Elimina</button>
                 </form>
             </div>
         </div>
@@ -50,13 +50,13 @@
                 <button type="submit" class="btn btn-primary" style="padding: 0.4rem 1rem;">+ Aggiungi Film</button>
             </form>
 
-            <a th:href="@{/admin/screenings/new(festivalId=${festival.id})}" class="btn btn-secondary" style="padding: 0.4rem 1rem;">📅 Programma Proiezione</a>
+            <a th:href="@{/admin/screenings/new(festivalId=${festival.id})}" class="btn btn-secondary" style="padding: 0.4rem 1rem;">Programma Proiezione</a>
         </div>
     </div>
 
     <!-- Elenco Film Partecipanti -->
     <div class="page-header">
-        <h2 class="page-title">🎬 Film Partecipanti (<span th:text="${festival.films.size()}">0</span>)</h2>
+        <h2 class="page-title">Film Partecipanti (<span th:text="${festival.films.size()}">0</span>)</h2>
     </div>
 
     <div th:if="${festival.films.isEmpty()}" style="padding: 2rem; background: white; border-radius: 8px; text-align: center; color: #6b7280;">
@@ -82,7 +82,7 @@
 
     <!-- Programma Proiezioni -->
     <div class="page-header">
-        <h2 class="page-title">🎞️ Programma delle Proiezioni</h2>
+        <h2 class="page-title">Programma delle Proiezioni</h2>
     </div>
 
     <div th:if="${proiezioni.isEmpty()}" style="padding: 2rem; background: white; border-radius: 8px; text-align: center; color: #6b7280;">

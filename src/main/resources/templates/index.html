@@ -2,7 +2,7 @@
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>FestivalProf - Gestione Festival Cinematografici</title>
+    <title>FestivalProf - Sistema Informativo Festival Cinematografici</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -10,67 +10,100 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="container">
-    <!-- Hero Section -->
-    <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; border-radius: 16px; padding: 3.5rem 2.5rem; margin-bottom: 2.5rem; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-        <h1 style="font-size: 2.8rem; font-weight: 900; margin-bottom: 1rem; color: #f59e0b;">Festival Cinematografici</h1>
-        <p style="font-size: 1.2rem; color: #cbd5e1; max-width: 750px; margin: 0 auto 2rem auto;">
-            Piattaforma per la consultazione e la gestione di festival del cinema, programmazione di proiezioni e recensioni di film.
+    <!-- Hero Section Editorial -->
+    <div style="background-color: #0f1013; color: #ffffff; border-radius: 14px; padding: 4rem 3rem; margin-bottom: 3rem; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08);">
+        <div style="position: absolute; top: -50px; right: -50px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(136, 19, 55, 0.35) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; pointer-events: none;"></div>
+        
+        <span class="badge badge-gold" style="background-color: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); margin-bottom: 1.2rem;">Rassegna Cinematografica Ufficiale</span>
+        
+        <h1 style="font-size: 3rem; font-weight: 800; margin: 0 0 1.2rem 0; color: #ffffff; line-height: 1.1; max-width: 800px;">
+            I Grandi Festival del Cinema Internazionale
+        </h1>
+        
+        <p style="font-size: 1.1rem; color: #a1a1aa; max-width: 700px; margin: 0 0 2.2rem 0; font-weight: 400; line-height: 1.6;">
+            Piattaforma informativa per la consultazione delle rassegne cinematografiche, programmazione delle proiezioni e recensioni critiche del pubblico.
         </p>
-        <div style="display: flex; gap: 15px; justify-content: center;">
-            <a th:href="@{/festivals}" class="btn btn-primary" style="padding: 0.8rem 1.8rem; font-size: 1.05rem;">Esplora Festival</a>
-            <a th:href="@{/movies}" class="btn btn-secondary" style="padding: 0.8rem 1.8rem; font-size: 1.05rem;">Catalogo Film</a>
+        
+        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <a th:href="@{/festivals}" class="btn btn-primary" style="padding: 0.75rem 1.6rem; font-size: 0.95rem;">Esplora i Festival</a>
+            <a th:href="@{/movies}" class="btn btn-outline" style="background: rgba(255, 255, 255, 0.05); color: #ffffff; border-color: rgba(255, 255, 255, 0.2); padding: 0.75rem 1.6rem; font-size: 0.95rem;">Catalogo dei Film</a>
         </div>
     </div>
 
     <!-- Festival in Programma -->
     <div class="page-header">
-        <h2 class="page-title">🏆 Festival Cinematografici</h2>
-        <a th:href="@{/festivals}" class="btn btn-outline">Vedi Tutti</a>
+        <div>
+            <h2 class="page-title">Festival Cinematografici</h2>
+            <p style="color: var(--text-secondary); margin: 4px 0 0 0; font-size: 0.92rem;">Le rassegne e mostre del cinema programmate a sistema</p>
+        </div>
+        <a th:href="@{/festivals}" class="btn btn-outline">Tutti i Festival &rarr;</a>
     </div>
 
-    <div class="grid" style="margin-bottom: 3rem;">
+    <div class="grid" style="margin-bottom: 3.5rem;">
         <div th:each="fest : ${festivals}" class="card">
             <div>
-                <span class="badge badge-gold" th:text="${fest.anno}">2026</span>
-                <h3 class="card-title" style="margin-top: 8px;" th:text="${fest.nome}">Nome Festival</h3>
-                <p class="card-subtitle">📍 <span th:text="${fest.citta}">Città</span> | 📅 <span th:text="${#temporals.format(fest.dataInizio, 'dd/MM/yyyy')}">01/01</span> - <span th:text="${#temporals.format(fest.dataFine, 'dd/MM/yyyy')}">10/01</span></p>
-                <p style="color: #4b5563; font-size: 0.95rem;" th:text="${fest.descrizione}">Descrizione festival...</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="badge badge-gold" th:text="${fest.anno}">2026</span>
+                    <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);"><span th:text="${fest.citta}">Città</span></span>
+                </div>
+                
+                <h3 class="card-title" th:text="${fest.nome}">Nome Festival</h3>
+                
+                <div class="card-subtitle">
+                    <span th:text="${#temporals.format(fest.dataInizio, 'dd/MM/yyyy')}">01/01</span> &mdash; <span th:text="${#temporals.format(fest.dataFine, 'dd/MM/yyyy')}">10/01</span>
+                </div>
+                
+                <p style="color: var(--text-secondary); font-size: 0.92rem; margin: 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;" th:text="${fest.descrizione}">
+                    Descrizione festival...
+                </p>
             </div>
-            <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.85rem; font-weight: 600; color: #6b7280;">🎬 <span th:text="${fest.films.size()}">0</span> Film | 🎞️ <span th:text="${fest.proiezioni.size()}">0</span> Proiezioni</span>
-                <a th:href="@{/festivals/{id}(id=${fest.id})}" class="btn btn-outline" style="font-size: 0.85rem;">Dettagli &rarr;</a>
+            
+            <div style="margin-top: 1.6rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+                <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary);">
+                    <span th:text="${fest.films.size()}">0</span> film &bull; <span th:text="${fest.proiezioni.size()}">0</span> proiezioni
+                </span>
+                <a th:href="@{/festivals/{id}(id=${fest.id})}" class="btn btn-outline" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;">Scheda Festival</a>
             </div>
         </div>
     </div>
 
     <!-- Ultimi Film Inseriti -->
     <div class="page-header">
-        <h2 class="page-title">🎬 Film in Evidenza</h2>
-        <a th:href="@{/movies}" class="btn btn-outline">Vedi Tutti</a>
+        <div>
+            <h2 class="page-title">Film in Evidenza</h2>
+            <p style="color: var(--text-secondary); margin: 4px 0 0 0; font-size: 0.92rem;">Opere cinematografiche selezionate per le rassegne</p>
+        </div>
+        <a th:href="@{/movies}" class="btn btn-outline">Tutti i Film &rarr;</a>
     </div>
 
     <div class="grid">
         <div th:each="film : ${films}" class="card">
             <div>
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <span class="badge badge-blue" th:text="${film.genere}">Genere</span>
-                    <span style="font-weight: 800; color: #e77600; font-size: 1.1rem;">★ <span th:text="${film.mediaVoti}">0.0</span></span>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="badge badge-burgundy" th:text="${film.genere}">Genere</span>
+                    <span style="font-weight: 800; color: var(--brand-gold); font-size: 1.05rem;">★ <span th:text="${film.mediaVoti}">0.0</span></span>
                 </div>
-                <h3 class="card-title" style="margin-top: 8px;" th:text="${film.titolo}">Titolo Film</h3>
-                <p class="card-subtitle">Anno: <span th:text="${film.anno}">2023</span> | Durata: <span th:text="${film.durata}">120</span> min | Paese: <span th:text="${film.paeseProduzione}">IT</span></p>
-                <p style="color: #4b5563; font-size: 0.95rem;">
-                    Regia: <strong th:text="${film.regista != null ? film.regista.nomeCompleto : 'N/D'}">Nome Regista</strong>
+                
+                <h3 class="card-title" th:text="${film.titolo}">Titolo Film</h3>
+                
+                <div class="card-subtitle">
+                    <span th:text="${film.anno}">2023</span> &bull; <span th:text="${film.durata}">120</span> min &bull; <span th:text="${film.paeseProduzione}">IT</span>
+                </div>
+                
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
+                    Regia: <strong style="color: var(--text-primary);" th:text="${film.regista != null ? film.regista.nomeCompleto : 'N/D'}">Nome Regista</strong>
                 </p>
             </div>
-            <div style="margin-top: 1.5rem;">
-                <a th:href="@{/movies/{id}(id=${film.id})}" class="btn btn-primary" style="width: 100%; text-align: center;">Scheda Film</a>
+            
+            <div style="margin-top: 1.6rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+                <a th:href="@{/movies/{id}(id=${film.id})}" class="btn btn-primary" style="width: 100%;">Scheda del Film</a>
             </div>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>System Information on Web - Università degli Studi Roma Tre | Project <strong>festivalProf</strong></p>
+    <p>Sistemi Informativi su Web &mdash; Università degli Studi Roma Tre | Progetto <strong>festivalProf</strong></p>
 </footer>
 
 </body>

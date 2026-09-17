@@ -12,10 +12,10 @@
 <div class="container">
     <div class="page-header">
         <div>
-            <h1 class="page-title">🎬 Catalogo Film</h1>
+            <h1 class="page-title">Catalogo Film</h1>
             <p style="color: #6b7280; margin-top: 4px;">Tutti i film inseriti a sistema con registi e valutazioni</p>
         </div>
-        <a th:if="${isAdmin}" th:href="@{/admin/movies/new}" class="btn btn-primary">➕ Nuovo Film</a>
+        <a th:if="${isAdmin}" th:href="@{/admin/movies/new}" class="btn btn-primary">+ Nuovo Film</a>
     </div>
 
     <div class="grid">
@@ -36,7 +36,7 @@
                 </p>
             </div>
             <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f3f4f6; padding-top: 0.8rem;">
-                <span style="font-size: 0.85rem; color: #6b7280; font-weight: 600;">💬 <span th:text="${film.recensioni.size()}">0</span> recensioni</span>
+                <span style="font-size: 0.85rem; color: #6b7280; font-weight: 600;"><span th:text="${film.recensioni.size()}">0</span> recensioni</span>
                 <a th:href="@{/movies/{id}(id=${film.id})}" class="btn btn-primary" style="font-size: 0.85rem;">Scheda Film</a>
             </div>
         </div>

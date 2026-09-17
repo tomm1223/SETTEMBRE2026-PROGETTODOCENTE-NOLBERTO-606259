@@ -12,10 +12,10 @@
 <div class="container">
     <div class="page-header">
         <div>
-            <h1 class="page-title">🏛️ Sale Cinematografiche</h1>
+            <h1 class="page-title">Sale Cinematografiche</h1>
             <p style="color: #6b7280; margin-top: 4px;">Gestione delle sale ospitanti le proiezioni dei festival</p>
         </div>
-        <a th:if="${isAdmin}" th:href="@{/admin/halls/new}" class="btn btn-primary">➕ Nuova Sala</a>
+        <a th:if="${isAdmin}" th:href="@{/admin/halls/new}" class="btn btn-primary">+ Nuova Sala</a>
     </div>
 
     <table class="table">
@@ -31,7 +31,7 @@
             <tr th:each="sala : ${sale}">
                 <td><strong th:text="${sala.nome}">Sala Grande</strong></td>
                 <td th:text="${sala.indirizzo}">Lungomare Marconi 30, Venezia</td>
-                <td><span class="badge badge-gold">🪑 <span th:text="${sala.capienza}">1000</span> posti</span></td>
+                <td><span class="badge badge-gold"><span th:text="${sala.capienza}">1000</span> posti</span></td>
                 <td th:if="${isAdmin}">
                     <div style="display: flex; gap: 8px;">
                         <a th:href="@{/admin/halls/{id}/edit(id=${sala.id})}" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.85rem;">Modifica</a>

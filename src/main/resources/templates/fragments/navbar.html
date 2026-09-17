@@ -4,31 +4,33 @@
 <body>
 
 <div th:fragment="navbar">
-    <nav class="navbar">
-        <a th:href="@{/}" class="navbar-brand">
-            🎬 CinemaInFestival
-        </a>
-        <ul class="navbar-nav">
-            <li><a th:href="@{/festivals}">Festival</a></li>
-            <li><a th:href="@{/movies}">Film</a></li>
-            <li><a th:href="@{/directors}">Registi</a></li>
-            <li><a th:href="@{/screenings}">Proiezioni</a></li>
-            <li th:if="${isAdmin}"><a th:href="@{/admin}">⚡ Admin Panel</a></li>
-        </ul>
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <!-- Se utente loggato -->
-            <div th:if="${userDetails}" style="display: flex; align-items: center; gap: 10px;">
-                <span th:if="${isAdmin}" class="nav-admin-badge">ADMIN</span>
-                <span class="nav-user-badge">👤 <span th:text="${userDetails.username}">User</span></span>
-                <a th:href="@{/logout}" class="btn btn-outline" style="color: #ffffff; border-color: #4b5563; padding: 4px 10px; font-size: 0.85rem;">Esci</a>
+    <div class="container">
+        <nav class="navbar">
+            <a th:href="@{/}" class="navbar-brand">
+                Cinema<span class="gold">InFestival</span>
+            </a>
+            <ul class="navbar-nav">
+                <li><a th:href="@{/festivals}">Festival</a></li>
+                <li><a th:href="@{/movies}">Film</a></li>
+                <li><a th:href="@{/directors}">Registi</a></li>
+                <li><a th:href="@{/screenings}">Proiezioni</a></li>
+                <li th:if="${isAdmin}"><a th:href="@{/admin}" style="color: #f59e0b;">Pannello Admin</a></li>
+            </ul>
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <!-- Se utente loggato -->
+                <div th:if="${userDetails}" style="display: flex; align-items: center; gap: 12px;">
+                    <span th:if="${isAdmin}" class="nav-admin-badge">ADMIN</span>
+                    <span class="nav-user-badge"><span th:text="${userDetails.username}">User</span></span>
+                    <a th:href="@{/logout}" class="btn btn-outline" style="background: transparent; color: #a1a1aa; border-color: rgba(255, 255, 255, 0.2); padding: 4px 12px; font-size: 0.8rem;">Esci</a>
+                </div>
+                <!-- Se ospite non loggato -->
+                <div th:unless="${userDetails}" style="display: flex; gap: 10px;">
+                    <a th:href="@{/login}" class="btn btn-outline" style="background: transparent; color: #ffffff; border-color: rgba(255, 255, 255, 0.2);">Accedi</a>
+                    <a th:href="@{/register}" class="btn btn-primary" style="background-color: var(--brand-burgundy);">Registrati</a>
+                </div>
             </div>
-            <!-- Se ospite non loggato -->
-            <div th:unless="${userDetails}" style="display: flex; gap: 8px;">
-                <a th:href="@{/login}" class="btn btn-outline" style="color: #ffffff; border-color: #4b5563;">Accedi</a>
-                <a th:href="@{/register}" class="btn btn-primary">Registrati</a>
-            </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
 </div>
 
 </body>

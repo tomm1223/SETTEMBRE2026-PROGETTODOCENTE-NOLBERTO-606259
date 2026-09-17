@@ -12,13 +12,13 @@
 <div class="container">
     <div class="form-container">
         <h2 style="text-align: center; margin-bottom: 1.5rem; color: #111827; font-weight: 800;"
-            th:text="${proiezione != null} ? '✏️ Modifica Proiezione' : '🎞️ Programma Nuova Proiezione'">
+            th:text="${proiezione != null} ? 'Modifica Proiezione' : 'Programma Nuova Proiezione'">
             Programma Proiezione
         </h2>
 
         <!-- Messaggio di Errore Sovrapposizione od Op. Transazionale -->
         <div th:if="${errorMessage}" class="alert alert-danger">
-            ⚠️ <span th:text="${errorMessage}">Errore durante la programmazione</span>
+            <span th:text="${errorMessage}">Errore durante la programmazione</span>
         </div>
 
         <form th:action="${proiezione != null} ? @{/admin/screenings/{id}/edit(id=${proiezione.id})} : @{/admin/screenings/new}" method="POST">

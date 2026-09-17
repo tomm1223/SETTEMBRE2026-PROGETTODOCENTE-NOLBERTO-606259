@@ -11,14 +11,14 @@
 
 <div class="container">
     <div class="form-container">
-        <h2 style="text-align: center; margin-bottom: 1.5rem; color: #111827; font-weight: 800;">🔐 Accedi al Sistema</h2>
+        <h2 style="text-align: center; margin-bottom: 1.5rem; color: #111827; font-weight: 800;">Accedi al Sistema</h2>
 
         <div th:if="${param.error}" class="alert alert-danger">
-            ⚠️ Username o Password errati. Riprova.
+            Username o Password errati. Riprova.
         </div>
 
         <div th:if="${param.registered}" class="alert alert-success">
-            ✅ Registrazione completata! Ora puoi effettuare il login con le tue credenziali.
+            Registrazione completata! Ora puoi effettuare il login con le tue credenziali.
         </div>
 
         <form th:action="@{/login}" method="POST">

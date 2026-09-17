@@ -12,10 +12,10 @@
 <div class="container">
     <div class="page-header">
         <div>
-            <h1 class="page-title">🎥 Registi Cinematografici</h1>
+            <h1 class="page-title">Registi Cinematografici</h1>
             <p style="color: #6b7280; margin-top: 4px;">Registi del panorama cinematografico nazionale e internazionale</p>
         </div>
-        <a th:if="${isAdmin}" th:href="@{/admin/directors/new}" class="btn btn-primary">➕ Nuovo Regista</a>
+        <a th:if="${isAdmin}" th:href="@{/admin/directors/new}" class="btn btn-primary">+ Nuovo Regista</a>
     </div>
 
     <div class="grid">
@@ -23,10 +23,10 @@
             <div>
                 <span class="badge badge-gold" th:text="${r.nazionalita}">Nazionalità</span>
                 <h2 class="card-title" style="margin-top: 8px;" th:text="${r.nomeCompleto}">Nome Cognome</h2>
-                <p class="card-subtitle">🎂 Nato il: <span th:text="${#temporals.format(r.dataNascita, 'dd/MM/yyyy')}">01/01/1970</span></p>
+                <p class="card-subtitle">Nato il: <span th:text="${#temporals.format(r.dataNascita, 'dd/MM/yyyy')}">01/01/1970</span></p>
             </div>
             <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f3f4f6; padding-top: 0.8rem;">
-                <span style="font-size: 0.85rem; color: #6b7280; font-weight: 600;">🎬 <span th:text="${r.film.size()}">0</span> film in catalogo</span>
+                <span style="font-size: 0.85rem; color: #6b7280; font-weight: 600;"><span th:text="${r.film.size()}">0</span> film in catalogo</span>
                 <a th:href="@{/directors/{id}(id=${r.id})}" class="btn btn-outline" style="font-size: 0.85rem;">Filmografia &rarr;</a>
             </div>
         </div>
